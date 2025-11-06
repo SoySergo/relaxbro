@@ -1,0 +1,43 @@
+{
+  "common": {
+    "search": "Buscar",
+    "filters": "Filtros",
+    "categories": "Categorías",
+    "favorites": "Favoritos",
+    "login": "Iniciar sesión",
+    "signup": "Registrarse",
+    "profile": "Perfil",
+    "logout": "Cerrar sesión",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "close": "Cerrar",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "loading": "Cargando...",
+    "error": "Error"
+  },
+  "categories": {
+    "active-recreation": "Recreación Activa",
+    "wellness-spa": "Wellness & SPA",
+    "gastronomy": "Gastronomía",
+    "nature": "Naturaleza",
+    "culture": "Cultura",
+    "nightlife": "Vida Nocturna",
+    "family": "Recreación Familiar",
+    "shopping": "Compras",
+    "unique-experience": "Experiencia Única",
+    "spiritual": "Prácticas Espirituales"
+  },
+  "map": {
+    "showList": "Mostrar Lista",
+    "showMap": "Mostrar Mapa"
+  },
+  "place": {
+    "rating": "Calificación",
+    "reviews": "Reseñas",
+    "address": "Dirección",
+    "contacts": "Contactos",
+    "workingHours": "Horario",
+    "description": "Descripción"
+  }
+}

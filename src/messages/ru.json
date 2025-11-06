@@ -1,0 +1,43 @@
+{
+  "common": {
+    "search": "Поиск",
+    "filters": "Фильтры",
+    "categories": "Категории",
+    "favorites": "Избранное",
+    "login": "Войти",
+    "signup": "Регистрация",
+    "profile": "Профиль",
+    "logout": "Выйти",
+    "save": "Сохранить",
+    "cancel": "Отмена",
+    "close": "Закрыть",
+    "back": "Назад",
+    "next": "Далее",
+    "loading": "Загрузка...",
+    "error": "Ошибка"
+  },
+  "categories": {
+    "active-recreation": "Активный отдых",
+    "wellness-spa": "Wellness & SPA",
+    "gastronomy": "Гастрономия",
+    "nature": "Природа",
+    "culture": "Культура",
+    "nightlife": "Ночная жизнь",
+    "family": "Семейный отдых",
+    "shopping": "Шопинг",
+    "unique-experience": "Уникальный опыт",
+    "spiritual": "Духовные практики"
+  },
+  "map": {
+    "showList": "Показать список",
+    "showMap": "Показать карту"
+  },
+  "place": {
+    "rating": "Рейтинг",
+    "reviews": "Отзывы",
+    "address": "Адрес",
+    "contacts": "Контакты",
+    "workingHours": "Часы работы",
+    "description": "Описание"
+  }
+}

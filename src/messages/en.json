@@ -1,0 +1,43 @@
+{
+  "common": {
+    "search": "Search",
+    "filters": "Filters",
+    "categories": "Categories",
+    "favorites": "Favorites",
+    "login": "Login",
+    "signup": "Sign Up",
+    "profile": "Profile",
+    "logout": "Logout",
+    "save": "Save",
+    "cancel": "Cancel",
+    "close": "Close",
+    "back": "Back",
+    "next": "Next",
+    "loading": "Loading...",
+    "error": "Error"
+  },
+  "categories": {
+    "active-recreation": "Active Recreation",
+    "wellness-spa": "Wellness & SPA",
+    "gastronomy": "Gastronomy",
+    "nature": "Nature",
+    "culture": "Culture",
+    "nightlife": "Nightlife",
+    "family": "Family Recreation",
+    "shopping": "Shopping",
+    "unique-experience": "Unique Experience",
+    "spiritual": "Spiritual Practices"
+  },
+  "map": {
+    "showList": "Show List",
+    "showMap": "Show Map"
+  },
+  "place": {
+    "rating": "Rating",
+    "reviews": "Reviews",
+    "address": "Address",
+    "contacts": "Contacts",
+    "workingHours": "Working Hours",
+    "description": "Description"
+  }
+}
