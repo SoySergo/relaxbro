@@ -1,7 +1,7 @@
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages } from 'next-intl/server'
 import { notFound } from 'next/navigation'
-import { locales } from '@/lib/i18n/config'
+import { routing } from '@/i18n/routing'
 
 export default async function LocaleLayout({
   children,
@@ -12,7 +12,8 @@ export default async function LocaleLayout({
 }) {
   const { locale } = await params
 
-  if (!locales.includes(locale as any)) {
+  // Ensure that the incoming `locale` is valid
+  if (!routing.locales.includes(locale as any)) {
     notFound()
   }
 

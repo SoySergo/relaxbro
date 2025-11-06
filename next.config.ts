@@ -12,6 +12,16 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // Redirect root to default locale
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/ru',
+        permanent: false,
+      },
+    ]
+  },
 }
 
 export default withNextIntl(nextConfig)
