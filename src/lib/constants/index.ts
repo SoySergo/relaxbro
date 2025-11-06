@@ -26,3 +26,9 @@ export const CATEGORIES: Category[] = [
 ]
 
 export const DEFAULT_ZOOM = 13
+
+// Re-export theme constants
+export * from './theme'
+
+// Re-export icons
+export * from './icons'

@@ -1,2 +1,4 @@
 export * from './cn'
-export * from './formatters'
+export { cn } from './cn';
+export * from './formatters';
+export * from './animations';

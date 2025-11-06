@@ -14,7 +14,8 @@
     "back": "Atrás",
     "next": "Siguiente",
     "loading": "Cargando...",
-    "error": "Error"
+    "error": "Error",
+    "language": "Idioma"
   },
   "categories": {
     "active-recreation": "Recreación Activa",
@@ -39,5 +40,54 @@
     "contacts": "Contactos",
     "workingHours": "Horario",
     "description": "Descripción"
+  },
+  "ui": {
+    "button": {
+      "cancel": "Cancelar",
+      "save": "Guardar",
+      "delete": "Eliminar",
+      "edit": "Editar",
+      "close": "Cerrar",
+      "submit": "Enviar",
+      "reset": "Restablecer"
+    },
+    "form": {
+      "required": "Campo obligatorio",
+      "email": "Ingrese un correo válido",
+      "password": "Mínimo 8 caracteres",
+      "passwordMatch": "Las contraseñas no coinciden"
+    },
+    "image": {
+      "upload": "Subir fotos",
+      "dragDrop": "Arrastra las imágenes aquí",
+      "dropHere": "Suelta los archivos aquí",
+      "or": "o",
+      "browse": "busca archivos",
+      "acceptedTypes": "Formatos aceptados",
+      "maxSize": "Máximo {size}MB",
+      "maxFiles": "Máximo {count} archivos",
+      "invalidType": "Formato no soportado. Usa: {types}",
+      "remove": "Eliminar",
+      "noImages": "No hay imágenes cargadas",
+      "uploaded": "cargado"
+    }
+  },
+  "footer": {
+    "description": "Descubre los mejores lugares para relajación y recreación.",
+    "company": "Empresa",
+    "about": "Acerca de",
+    "blog": "Blog",
+    "careers": "Carreras",
+    "support": "Soporte",
+    "help": "Centro de Ayuda",
+    "contact": "Contacto",
+    "faq": "Preguntas Frecuentes",
+    "legal": "Legal",
+    "privacy": "Política de Privacidad",
+    "terms": "Términos de Servicio",
+    "cookies": "Política de Cookies",
+    "rights": "Todos los derechos reservados.",
+    "madeWith": "Hecho con",
+    "in": "en"
   }
 }

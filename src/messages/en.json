@@ -14,7 +14,8 @@
     "back": "Back",
     "next": "Next",
     "loading": "Loading...",
-    "error": "Error"
+    "error": "Error",
+    "language": "Language"
   },
   "categories": {
     "active-recreation": "Active Recreation",
@@ -39,5 +40,54 @@
     "contacts": "Contacts",
     "workingHours": "Working Hours",
     "description": "Description"
+  },
+  "ui": {
+    "button": {
+      "cancel": "Cancel",
+      "save": "Save",
+      "delete": "Delete",
+      "edit": "Edit",
+      "close": "Close",
+      "submit": "Submit",
+      "reset": "Reset"
+    },
+    "form": {
+      "required": "Required field",
+      "email": "Enter a valid email",
+      "password": "Minimum 8 characters",
+      "passwordMatch": "Passwords do not match"
+    },
+    "image": {
+      "upload": "Upload photos",
+      "dragDrop": "Drag and drop images here",
+      "dropHere": "Drop files here",
+      "or": "or",
+      "browse": "browse files",
+      "acceptedTypes": "Accepted formats",
+      "maxSize": "Maximum {size}MB",
+      "maxFiles": "Maximum {count} files",
+      "invalidType": "Unsupported format. Use: {types}",
+      "remove": "Remove",
+      "noImages": "No uploaded images",
+      "uploaded": "uploaded"
+    }
+  },
+  "footer": {
+    "description": "Discover the best places for relaxation and recreation.",
+    "company": "Company",
+    "about": "About",
+    "blog": "Blog",
+    "careers": "Careers",
+    "support": "Support",
+    "help": "Help Center",
+    "contact": "Contact",
+    "faq": "FAQ",
+    "legal": "Legal",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "cookies": "Cookie Policy",
+    "rights": "All rights reserved.",
+    "madeWith": "Made with",
+    "in": "in"
   }
 }
