@@ -70,7 +70,53 @@
       "remove": "Удалить",
       "noImages": "Нет загруженных изображений",
       "uploaded": "загружено"
+    },
+    "show-more": "Показать ещё",
+    "show-less": "Скрыть",
+    "active-filters": "Активные фильтры",
+    "clear-all": "Очистить всё"
+  },
+  "activities": {
+    "categories": {
+      "tours-excursions": "Туры и экскурсии",
+      "water-sports": "Водные виды спорта",
+      "workshops": "Мастер-классы",
+      "photoshoots": "Фотосессии",
+      "yacht-fishing": "Яхтинг и рыбалка",
+      "extreme-sports": "Экстремальные виды спорта",
+      "cultural-tours": "Культурные туры",
+      "food-tours": "Гастрономические туры",
+      "team-building": "Тимбилдинг",
+      "private-experiences": "Частные впечатления"
+    },
+    "common": {
+      "from-prefix": "от",
+      "per-person": "на человека",
+      "hour": "час",
+      "hours": "часов",
+      "hours-few": "часа",
+      "hour-short": "ч",
+      "day": "день",
+      "days": "дней",
+      "days-few": "дня",
+      "day-short": "д",
+      "full-day": "Полный день",
+      "up-to": "До {count} человек",
+      "group-range": "{min}-{max} чел",
+      "private": "Частный тур",
+      "group": "Групповой",
+      "flexible": "Гибко",
+      "verified": "Проверено",
+      "instant-booking": "Мгновенное бронирование",
+      "meeting-point": "Точка встречи",
+      "meeting-point-flexible": "Выбор локации",
+      "included": "Включено",
+      "not-included": "Не включено"
     }
+  },
+  "header": {
+    "places": "Места",
+    "activities": "Активности"
   },
   "footer": {
     "description": "Откройте лучшие места для отдыха и релаксации.",

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useTranslations, useLocale } from 'next-intl';
 import { Menu, X, User, Heart, Search, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -35,9 +35,14 @@ export function Header({ variant = 'app', className, isAuthenticated = false, us
     const t = useTranslations();
     const locale = useLocale();
     const router = useRouter();
+    const pathname = usePathname();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     const isLanding = variant === 'landing';
+
+    // Determine active tab based on pathname
+    const isActivitiesPage = pathname?.includes('/activities');
+    const isPlacesPage = pathname?.includes('/explore');
 
     const languages = [
         { code: 'ru', name: 'Русский', flag: '🇷🇺' },
@@ -53,8 +58,8 @@ export function Header({ variant = 'app', className, isAuthenticated = false, us
 
     const navigation = isLanding
         ? [
-            { name: t('common.categories'), href: `/${locale}/#categories` },
-            { name: t('common.search'), href: `/${locale}/explore` },
+            { name: t('header.places'), href: `/${locale}/explore` },
+            { name: t('header.activities'), href: `/${locale}/activities` },
         ]
         : [
             { name: t('common.search'), href: `/${locale}/explore` },
@@ -72,18 +77,48 @@ export function Header({ variant = 'app', className, isAuthenticated = false, us
                         <span className="text-xl font-bold text-foreground">RelaxBro</span>
                     </Link>
 
-                    {/* Desktop Navigation */}
-                    <nav className="hidden items-center space-x-6 md:flex">
-                        {navigation.map((item) => (
-                            <Link
-                                key={item.name}
-                                href={item.href}
-                                className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-                            >
-                                {item.name}
-                            </Link>
-                        ))}
-                    </nav>
+                    {/* Desktop Navigation - Links for Places | Activities */}
+                    <div className="hidden items-center md:flex">
+                        {!isLanding && (
+                            <nav className="flex items-center space-x-6">
+                                <Link
+                                    href={`/${locale}/explore`}
+                                    className={cn(
+                                        'text-sm font-medium transition-colors hover:text-foreground',
+                                        isPlacesPage
+                                            ? 'text-foreground'
+                                            : 'text-muted-foreground'
+                                    )}
+                                >
+                                    {t('header.places')}
+                                </Link>
+                                <Link
+                                    href={`/${locale}/activities`}
+                                    className={cn(
+                                        'text-sm font-medium transition-colors hover:text-foreground',
+                                        isActivitiesPage
+                                            ? 'text-foreground'
+                                            : 'text-muted-foreground'
+                                    )}
+                                >
+                                    {t('header.activities')}
+                                </Link>
+                            </nav>
+                        )}
+                        {isLanding && (
+                            <nav className="flex items-center space-x-6">
+                                {navigation.map((item) => (
+                                    <Link
+                                        key={item.name}
+                                        href={item.href}
+                                        className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                                    >
+                                        {item.name}
+                                    </Link>
+                                ))}
+                            </nav>
+                        )}
+                    </div>
 
                     {/* Right side: Language switcher + Auth buttons */}
                     <div className="flex items-center space-x-3">
@@ -218,6 +253,36 @@ export function Header({ variant = 'app', className, isAuthenticated = false, us
                 {isMobileMenuOpen && (
                     <div className="border-t py-4 md:hidden animate-in slide-in-from-top-2 duration-200">
                         <nav className="flex flex-col space-y-1">
+                            {/* Places / Activities Navigation for App */}
+                            {!isLanding && (
+                                <div className="border-b pb-2 mb-2">
+                                    <Link
+                                        href={`/${locale}/explore`}
+                                        className={cn(
+                                            'rounded-md px-4 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-foreground active:bg-accent/50 block',
+                                            isPlacesPage
+                                                ? 'text-foreground bg-accent'
+                                                : 'text-muted-foreground'
+                                        )}
+                                        onClick={() => setIsMobileMenuOpen(false)}
+                                    >
+                                        {t('header.places')}
+                                    </Link>
+                                    <Link
+                                        href={`/${locale}/activities`}
+                                        className={cn(
+                                            'rounded-md px-4 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-foreground active:bg-accent/50 block',
+                                            isActivitiesPage
+                                                ? 'text-foreground bg-accent'
+                                                : 'text-muted-foreground'
+                                        )}
+                                        onClick={() => setIsMobileMenuOpen(false)}
+                                    >
+                                        {t('header.activities')}
+                                    </Link>
+                                </div>
+                            )}
+
                             {/* Navigation Links */}
                             {navigation.map((item) => (
                                 <Link
