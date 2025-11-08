@@ -72,6 +72,11 @@
       "uploaded": "cargado"
     }
   },
+  "header": {
+    "home": "Inicio",
+    "places": "Lugares",
+    "activities": "Actividades"
+  },
   "footer": {
     "description": "Descubre los mejores lugares para relajación y recreación.",
     "company": "Empresa",

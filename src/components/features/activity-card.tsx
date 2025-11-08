@@ -35,6 +35,8 @@ export function ActivityCard({
   const [isFavorite, setIsFavorite] = useState(false)
   const [imageLoaded, setImageLoaded] = useState(false)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [touchStart, setTouchStart] = useState(0)
+  const [touchEnd, setTouchEnd] = useState(0)
 
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -51,6 +53,36 @@ export function ActivityCard({
     setCurrentImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1))
   }
 
+  // Touch handlers for swipe
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (!touchStart || !touchEnd) return
+
+    const distance = touchStart - touchEnd
+    const isLeftSwipe = distance > 50
+    const isRightSwipe = distance < -50
+
+    if (isLeftSwipe) {
+      e.stopPropagation()
+      setCurrentImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1))
+    }
+    if (isRightSwipe) {
+      e.stopPropagation()
+      setCurrentImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1))
+    }
+
+    // Reset values
+    setTouchStart(0)
+    setTouchEnd(0)
+  }
+
   const hasMultipleImages = images.length > 1
 
   return (
@@ -64,7 +96,12 @@ export function ActivityCard({
       onClick={onClick}
     >
       {/* Image Section */}
-      <div className="relative aspect-4/3 overflow-hidden bg-muted group/image">
+      <div
+        className="relative aspect-4/3 overflow-hidden bg-muted group/image"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
         <Image
           src={images[currentImageIndex] || '/placeholder.jpg'}
           alt={name}
@@ -188,9 +225,9 @@ export function ActivityCard({
       </div>
 
       {/* Content Section */}
-      <div className="p-3 sm:p-4 space-y-2">
+      <div className="px-4 py-3 sm:p-4 space-y-2.5">
         {/* Title */}
-        <h3 className="font-semibold text-sm sm:text-base line-clamp-2 leading-tight">
+        <h3 className="font-semibold text-xl line-clamp-2 leading-snug flex items-start">
           {name}
         </h3>
 
@@ -204,15 +241,15 @@ export function ActivityCard({
         />
 
         {/* Rating and Reviews */}
-        <div className="flex items-center gap-1.5 sm:gap-2">
+        <div className="flex items-center gap-2 ">
           <Rating value={rating} readonly size="sm" />
-          <span className="text-xs sm:text-sm text-muted-foreground whitespace-nowrap">
+          <span className="text-sm text-muted-foreground whitespace-nowrap">
             ({reviewsCount})
           </span>
         </div>
 
         {/* Duration and Group Size */}
-        <div className="flex flex-wrap gap-1.5 sm:gap-2">
+        <div className="flex flex-wrap gap-2">
           <DurationBadge value={duration.value} unit={duration.unit} variant="default" />
           <GroupSizeBadge min={groupSize.min} max={groupSize.max} />
         </div>

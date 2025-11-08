@@ -15,6 +15,8 @@ import {
     Separator,
     ImageUploader,
     SearchInput,
+    SearchWithResults,
+    type SearchResult,
     type ImageFile,
 } from '@/components/ui';
 import { CategoryCard, PlaceCard, PlaceCardSkeleton } from '@/components/features';
@@ -27,8 +29,11 @@ import { GroupSizeBadge } from '@/components/ui/group-size-badge';
 import { MeetingPointBadge } from '@/components/ui/meeting-point-badge';
 import { TagList } from '@/components/ui/tag-list';
 import { FilterChips, type FilterChipItem } from '@/components/ui/filter-chips';
-import { Header, Footer, Container } from '@/components/layout';
+import { FilterBar, CategoryFilter, AdvancedFilters } from '@/components/features/filters';
+import type { FilterBarState, AdvancedFiltersState } from '@/components/features/filters';
+import { Header, Footer, Container, MobileBottomNav } from '@/components/layout';
 import { Waves, Sparkles, UtensilsCrossed, Trees, Palette, Music, Compass } from 'lucide-react';
+import type { ActivityCategory } from '@/lib/types';
 
 export default function DemoPage() {
     const [ratingValue, setRatingValue] = useState(3.5);
@@ -38,27 +43,111 @@ export default function DemoPage() {
     const [searchLoading, setSearchLoading] = useState(false);
     const [debouncedSearchValue, setDebouncedSearchValue] = useState('');
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
+    // Search with results state
+    const [searchWithResultsValue, setSearchWithResultsValue] = useState('');
+    const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
+    const [searchResultsTotal, setSearchResultsTotal] = useState(0);
+    const [searchResultsLoading, setSearchResultsLoading] = useState(false);
     const [activeFilters, setActiveFilters] = useState<FilterChipItem[]>([
         { id: '1', label: 'Туры и экскурсии', icon: <Compass className="h-3 w-3" /> },
         { id: '2', label: 'от €30 до €80' },
         { id: '3', label: 'Полный день' },
     ]);
 
+    // Filter Bar State
+    const [filterBarState, setFilterBarState] = useState<FilterBarState>({
+        searchQuery: '',
+        categories: [],
+        rating: 0,
+        priceRange: [0, Infinity],
+        openNow: false,
+    });
+
+    // Category Filter State
+    const [selectedCategories, setSelectedCategories] = useState<ActivityCategory[]>([]);
+
+    // Advanced Filters State
+    const [advancedFilters, setAdvancedFilters] = useState<AdvancedFiltersState>({
+        rating: 0,
+        priceRange: [0, Infinity],
+        openNow: false,
+    });
+
+    const categoryCounts: Record<ActivityCategory, number> = {
+        'tours-excursions': 45,
+        'water-sports': 32,
+        'workshops': 28,
+        'photoshoots': 19,
+        'yacht-fishing': 15,
+        'extreme-sports': 23,
+        'cultural-tours': 38,
+        'food-tours': 41,
+        'team-building': 12,
+        'private-experiences': 26,
+    };
+
+    const handleFilterBarChange = async (updates: Partial<FilterBarState>) => {
+        setFilterBarState((prev) => ({ ...prev, ...updates }));
+
+        // Handle search query change
+        if (updates.searchQuery !== undefined) {
+            const query = updates.searchQuery;
+            if (query.trim()) {
+                setSearchResultsLoading(true);
+                const { mockSearchAPI } = await import('@/lib/api/search');
+                const { results, total } = await mockSearchAPI(query);
+                setSearchResults(results);
+                setSearchResultsTotal(total);
+                setSearchResultsLoading(false);
+            } else {
+                setSearchResults([]);
+                setSearchResultsTotal(0);
+            }
+        }
+    };
+
+    const handleResetFilters = () => {
+        setFilterBarState({
+            searchQuery: '',
+            categories: [],
+            rating: 0,
+            priceRange: [0, Infinity],
+            openNow: false,
+        });
+        setSearchResults([]);
+        setSearchResultsTotal(0);
+    };
+
+    const handleToggleCategory = (category: ActivityCategory) => {
+        setSelectedCategories((prev) =>
+            prev.includes(category)
+                ? prev.filter((c) => c !== category)
+                : [...prev, category]
+        );
+    };
+
+    const handleAdvancedFiltersChange = (updates: Partial<AdvancedFiltersState>) => {
+        setAdvancedFilters((prev) => ({ ...prev, ...updates }));
+    };
+
     return (
-        <div className="container mx-auto py-10 space-y-8">
-            <div className="space-y-2">
-                <h1 className="text-4xl font-bold">Component Demo Page</h1>
-                <p className="text-muted-foreground">
-                    Testing ground for all UI components including Layout, UI elements, and Features
-                </p>
-                <div className="flex flex-wrap gap-2 mt-4">
-                    <Badge variant="outline">25+ UI Components</Badge>
-                    <Badge variant="outline">3 Custom Components</Badge>
-                    <Badge variant="outline">2 Feature Components</Badge>
-                    <Badge variant="outline">3 Layout Components</Badge>
-                    <Badge variant="outline">Full i18n Support</Badge>
+        <>
+            <div className="container mx-auto py-10 space-y-8 pb-24 md:pb-10">
+                <div className="space-y-2">
+                    <h1 className="text-4xl font-bold">Component Demo Page</h1>
+                    <p className="text-muted-foreground">
+                        Testing ground for all UI components including Layout, UI elements, and Features
+                    </p>
+                    <div className="flex flex-wrap gap-2 mt-4">
+                        <Badge variant="outline">25+ UI Components</Badge>
+                        <Badge variant="outline">3 Custom Components</Badge>
+                        <Badge variant="outline">2 Feature Components</Badge>
+                        <Badge variant="outline">3 Layout Components</Badge>
+                        <Badge variant="outline">Full i18n Support</Badge>
+                        <Badge variant="outline">Mobile Bottom Nav</Badge>
+                    </div>
                 </div>
-            </div>
 
             <Separator />
 
@@ -76,15 +165,15 @@ export default function DemoPage() {
                         <Label>Size Variants</Label>
                         <div className="flex flex-col gap-3">
                             <div className="flex items-center gap-4">
-                                <span className="w-24 text-sm">Small:</span>
+                                <span className="w-20 sm:w-24 text-sm flex-shrink-0">Small:</span>
                                 <Rating size="sm" value={4} onChange={(v) => console.log(v)} />
                             </div>
                             <div className="flex items-center gap-4">
-                                <span className="w-24 text-sm">Medium:</span>
+                                <span className="w-20 sm:w-24 text-sm flex-shrink-0">Medium:</span>
                                 <Rating size="md" value={4} onChange={(v) => console.log(v)} />
                             </div>
                             <div className="flex items-center gap-4">
-                                <span className="w-24 text-sm">Large:</span>
+                                <span className="w-20 sm:w-24 text-sm flex-shrink-0">Large:</span>
                                 <Rating size="lg" value={4} onChange={(v) => console.log(v)} />
                             </div>
                         </div>
@@ -95,7 +184,7 @@ export default function DemoPage() {
                     {/* Interactive rating */}
                     <div className="space-y-3">
                         <Label>Interactive Rating</Label>
-                        <div className="flex items-center gap-4">
+                        <div className="flex flex-wrap items-center gap-4">
                             <Rating
                                 value={ratingValue}
                                 onChange={setRatingValue}
@@ -112,20 +201,20 @@ export default function DemoPage() {
                     <div className="space-y-3">
                         <Label>Readonly Ratings</Label>
                         <div className="flex flex-col gap-3">
-                            <div className="flex items-center gap-4">
-                                <span className="w-32 text-sm">Full stars:</span>
+                            <div className="flex flex-wrap items-center gap-2 sm:gap-4">
+                                <span className="w-28 sm:w-32 text-sm flex-shrink-0">Full stars:</span>
                                 <Rating value={5} readonly showValue count={1234} />
                             </div>
-                            <div className="flex items-center gap-4">
-                                <span className="w-32 text-sm">Half stars:</span>
+                            <div className="flex flex-wrap items-center gap-2 sm:gap-4">
+                                <span className="w-28 sm:w-32 text-sm flex-shrink-0">Half stars:</span>
                                 <Rating value={readonlyRating} readonly showValue count={567} />
                             </div>
-                            <div className="flex items-center gap-4">
-                                <span className="w-32 text-sm">Low rating:</span>
+                            <div className="flex flex-wrap items-center gap-2 sm:gap-4">
+                                <span className="w-28 sm:w-32 text-sm flex-shrink-0">Low rating:</span>
                                 <Rating value={2} readonly showValue count={89} />
                             </div>
-                            <div className="flex items-center gap-4">
-                                <span className="w-32 text-sm">No half stars:</span>
+                            <div className="flex flex-wrap items-center gap-2 sm:gap-4">
+                                <span className="w-28 sm:w-32 text-sm flex-shrink-0">No half stars:</span>
                                 <Rating
                                     value={3.7}
                                     readonly
@@ -142,7 +231,7 @@ export default function DemoPage() {
                     {/* Without numeric value */}
                     <div className="space-y-3">
                         <Label>Simple Display (no numbers)</Label>
-                        <div className="flex gap-6">
+                        <div className="flex flex-wrap gap-4">
                             <Rating value={5} readonly />
                             <Rating value={4} readonly />
                             <Rating value={3} readonly />
@@ -326,6 +415,62 @@ export default function DemoPage() {
                             showClearButton={false}
                             placeholder="No clear button..."
                         />
+                    </div>
+                </CardContent>
+            </Card>
+
+            {/* Search With Results Demo */}
+            <Card>
+                <CardHeader>
+                    <CardTitle>Search With Results (NEW)</CardTitle>
+                    <CardDescription>
+                        Enhanced search input with dropdown results, loader, and &quot;Show all&quot; option
+                    </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                    <div className="space-y-3">
+                        <Label>Search with Live Results</Label>
+                        <p className="text-sm text-muted-foreground">
+                            Shows first 5 results + &quot;Show all&quot; button with total count
+                        </p>
+                        <SearchWithResults
+                            value={searchWithResultsValue}
+                            onChange={async (value) => {
+                                setSearchWithResultsValue(value);
+                                if (value.trim()) {
+                                    setSearchResultsLoading(true);
+                                    // Simulate API call
+                                    const { mockSearchAPI } = await import('@/lib/api/search');
+                                    const { results, total } = await mockSearchAPI(value);
+                                    setSearchResults(results);
+                                    setSearchResultsTotal(total);
+                                    setSearchResultsLoading(false);
+                                } else {
+                                    setSearchResults([]);
+                                    setSearchResultsTotal(0);
+                                }
+                            }}
+                            results={searchResults}
+                            totalCount={searchResultsTotal}
+                            loading={searchResultsLoading}
+                            onResultSelect={(result) => {
+                                console.log('Selected:', result);
+                                alert(`Выбрано: ${result.name} (${result.type})`);
+                            }}
+                            onShowAll={() => {
+                                console.log('Show all results:', searchResultsTotal);
+                                alert(`Показать все ${searchResultsTotal} результатов`);
+                            }}
+                            placeholder="Поиск мест и активностей..."
+                            maxResults={5}
+                        />
+                        <div className="text-xs text-muted-foreground space-y-1">
+                            <p>• Начните вводить: &quot;яхт&quot; (11 результатов), &quot;spa&quot; (3), &quot;вин&quot; (3), &quot;пляж&quot; (3), &quot;дайв&quot; (2)</p>
+                            <p>• Показывает первые 5 результатов из списка</p>
+                            <p>• Лоадер во время поиска</p>
+                            <p>• Кнопка &quot;Показать все (N)&quot; с общим количеством результатов</p>
+                            <p>• Всего в базе: 29 мест и активностей</p>
+                        </div>
                     </div>
                 </CardContent>
             </Card>
@@ -582,6 +727,120 @@ export default function DemoPage() {
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
+
+                    {/* Filter Components Demo - NEW SECTION */}
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Filter Components</CardTitle>
+                            <CardDescription>
+                                All filter components: FilterBar, CategoryFilter, AdvancedFilters
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-6">
+                            <div className="space-y-3">
+                                <Label>Complete Filter Bar</Label>
+                                <p className="text-sm text-muted-foreground mb-4">
+                                    Full filter bar with search, categories, and advanced filters
+                                </p>
+                                <FilterBar
+                                    filters={filterBarState}
+                                    onFiltersChange={handleFilterBarChange}
+                                    onReset={handleResetFilters}
+                                    variant="inline"
+                                    categoryCounts={categoryCounts}
+                                />
+                                <div className="mt-4 p-4 bg-muted rounded-lg">
+                                    <p className="text-sm font-medium mb-2">Current Filter State:</p>
+                                    <pre className="text-xs overflow-auto">
+                                        {JSON.stringify(filterBarState, null, 2)}
+                                    </pre>
+                                </div>
+                            </div>
+
+                            <Separator />
+
+                            <div className="space-y-3">
+                                <Label>Category Filter (Standalone)</Label>
+                                <p className="text-sm text-muted-foreground mb-4">
+                                    Category chips with icons and counts
+                                </p>
+                                <CategoryFilter
+                                    selectedCategories={selectedCategories}
+                                    onToggleCategory={handleToggleCategory}
+                                    counts={categoryCounts}
+                                />
+                                <div className="mt-4">
+                                    <p className="text-sm text-muted-foreground">
+                                        Selected: {selectedCategories.length > 0 ? selectedCategories.join(', ') : 'None'}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <Separator />
+
+                            <div className="space-y-3">
+                                <Label>Advanced Filters (Standalone)</Label>
+                                <p className="text-sm text-muted-foreground mb-4">
+                                    Dropdown with rating, price range, and open now filters
+                                </p>
+                                <div className="flex items-start gap-4">
+                                    <AdvancedFilters
+                                        filters={advancedFilters}
+                                        onFiltersChange={handleAdvancedFiltersChange}
+                                    />
+                                    <div className="flex-1 p-4 bg-muted rounded-lg">
+                                        <p className="text-sm font-medium mb-2">Advanced Filters State:</p>
+                                        <div className="space-y-1 text-sm">
+                                            <div className="flex justify-between">
+                                                <span>Rating:</span>
+                                                <span className="font-medium">{advancedFilters.rating}+</span>
+                                            </div>
+                                            <div className="flex justify-between">
+                                                <span>Price Range:</span>
+                                                <span className="font-medium">
+                                                    €{advancedFilters.priceRange[0]} - €{advancedFilters.priceRange[1]}
+                                                </span>
+                                            </div>
+                                            <div className="flex justify-between">
+                                                <span>Open Now:</span>
+                                                <span className="font-medium">
+                                                    {advancedFilters.openNow ? 'Yes' : 'No'}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <Separator />
+
+                            <div className="space-y-3">
+                                <Label>Filter Bar - Floating Variant (Demo)</Label>
+                                <p className="text-sm text-muted-foreground mb-4">
+                                    Example of floating filter bar (on real map page it would be position: fixed)
+                                </p>
+                                <div className="p-4 bg-muted/50 rounded-lg">
+                                    <FilterBar
+                                        filters={filterBarState}
+                                        onFiltersChange={handleFilterBarChange}
+                                        onReset={handleResetFilters}
+                                        variant="inline"
+                                        categoryCounts={categoryCounts}
+                                        searchResults={searchResults}
+                                        searchTotalCount={searchResultsTotal}
+                                        searchLoading={searchResultsLoading}
+                                        onSearchResultSelect={(result) => {
+                                            alert(`Selected: ${result.name} (${result.type})`);
+                                        }}
+                                        onShowAllResults={() => {
+                                            alert(`Show all ${searchResultsTotal} results`);
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+
                     <div className="space-y-3">
                         <Label>Price Display Component</Label>
                         <div className="flex flex-wrap gap-4 items-center">
@@ -1062,45 +1321,61 @@ export default function DemoPage() {
                     <Separator />
 
                     <div className="space-y-3">
-                        <Label>Full Page Layout Example</Label>
+                        <Label>Full Page Layout Example with FilterBar</Label>
                         <p className="text-sm text-muted-foreground mb-4">
-                            Complete page structure with Header, Container, and Footer
+                            Complete page structure with Header, FilterBar, Container, and Footer
                         </p>
                         <div className="border rounded-lg overflow-hidden bg-background">
-                            <div className="relative" style={{ height: '600px', overflow: 'auto' }}>
+                            <div className="relative" style={{ height: '800px', overflow: 'auto' }}>
                                 <Header variant="app" />
                                 <Container className="py-8">
                                     <div className="space-y-6">
                                         <div>
-                                            <h2 className="text-2xl font-bold mb-2">Page Title</h2>
+                                            <h2 className="text-2xl font-bold mb-2">Search & Filter Page</h2>
                                             <p className="text-muted-foreground">
-                                                This is an example of a complete page layout using all three layout components.
+                                                Example of a page with integrated FilterBar - typical for search/explore pages
                                             </p>
                                         </div>
+
+                                        {/* FilterBar Integration */}
                                         <Card>
-                                            <CardHeader>
-                                                <CardTitle>Content Card</CardTitle>
-                                            </CardHeader>
-                                            <CardContent>
-                                                <p className="text-sm">
-                                                    Your main content goes here, wrapped in a Container component
-                                                    which provides consistent spacing and max-width.
-                                                </p>
+                                            <CardContent className="">
+                                                <FilterBar
+                                                    filters={filterBarState}
+                                                    onFiltersChange={handleFilterBarChange}
+                                                    onReset={handleResetFilters}
+                                                    variant="inline"
+                                                    categoryCounts={categoryCounts}
+                                                    searchResults={searchResults}
+                                                    searchTotalCount={searchResultsTotal}
+                                                    searchLoading={searchResultsLoading}
+                                                    onSearchResultSelect={(result) => {
+                                                        alert(`Selected: ${result.name} (${result.type})`);
+                                                    }}
+                                                    onShowAllResults={() => {
+                                                        alert(`Show all ${searchResultsTotal} results`);
+                                                    }}
+                                                />
                                             </CardContent>
                                         </Card>
-                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                            {[1, 2, 3].map((i) => (
-                                                <Card key={i}>
-                                                    <CardHeader>
-                                                        <CardTitle>Card {i}</CardTitle>
-                                                    </CardHeader>
-                                                    <CardContent>
-                                                        <p className="text-sm text-muted-foreground">
-                                                            Example content
-                                                        </p>
-                                                    </CardContent>
-                                                </Card>
-                                            ))}
+
+                                        {/* Example Results */}
+                                        <div>
+                                            <h3 className="text-lg font-semibold mb-4">Search Results</h3>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                                {[1, 2, 3, 4, 5, 6].map((i) => (
+                                                    <Card key={i}>
+                                                        <CardHeader>
+                                                            <CardTitle>Activity {i}</CardTitle>
+                                                        </CardHeader>
+                                                        <CardContent>
+                                                            <p className="text-sm text-muted-foreground">
+                                                                Example activity content matching the selected filters
+                                                            </p>
+                                                        </CardContent>
+                                                    </Card>
+                                                ))}
+                                            </div>
                                         </div>
                                     </div>
                                 </Container>
@@ -1110,6 +1385,51 @@ export default function DemoPage() {
                     </div>
                 </CardContent>
             </Card>
+
+            {/* Mobile Bottom Navigation Demo */}
+            <Card>
+                <CardHeader>
+                    <CardTitle>Mobile Bottom Navigation (NEW)</CardTitle>
+                    <CardDescription>
+                        Fixed bottom navigation bar for mobile devices - resize window to see in action
+                    </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                    <div className="space-y-3">
+                        <Label>Bottom Navigation Bar</Label>
+                        <p className="text-sm text-muted-foreground">
+                            На мобильных устройствах ({"<"} md breakpoint) внизу экрана отображается фиксированная панель навигации с 5 основными разделами:
+                        </p>
+                        <ul className="text-sm text-muted-foreground list-disc list-inside space-y-1">
+                            <li><strong>Главная</strong> - Домашняя страница</li>
+                            <li><strong>Места</strong> - Карта и список мест (explore)</li>
+                            <li><strong>Активности</strong> - Список активностей</li>
+                            <li><strong>Избранное</strong> - Сохранённые места и активности</li>
+                            <li><strong>Профиль</strong> - Личный кабинет</li>
+                        </ul>
+                        <div className="p-4 bg-muted rounded-lg space-y-2">
+                            <p className="text-sm font-medium">Особенности:</p>
+                            <ul className="text-sm text-muted-foreground list-disc list-inside space-y-1">
+                                <li>Видна только на мобильных устройствах ({"<"} 768px)</li>
+                                <li>Фиксирована внизу экрана (position: fixed)</li>
+                                <li>Активная вкладка подсвечивается цветом и увеличенной иконкой</li>
+                                <li>Header упрощён на мобильных: только логотип, который скрывается при скролле вниз</li>
+                                <li>Контент страницы имеет отступ снизу (pb-24) чтобы не перекрываться навигацией</li>
+                            </ul>
+                        </div>
+                        <div className="border-2 border-dashed border-primary rounded-lg p-6 text-center">
+                            <p className="text-sm font-medium mb-2">📱 Посмотрите внизу экрана на мобильном устройстве!</p>
+                            <p className="text-xs text-muted-foreground">
+                                Откройте DevTools и переключитесь в мобильный режим (F12 → Toggle device toolbar)
+                            </p>
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
         </div>
+
+            {/* Mobile Bottom Navigation - visible only on mobile */}
+            <MobileBottomNav />
+        </>
     );
 }

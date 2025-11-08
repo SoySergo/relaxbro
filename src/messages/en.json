@@ -72,6 +72,11 @@
       "uploaded": "uploaded"
     }
   },
+  "header": {
+    "home": "Home",
+    "places": "Places",
+    "activities": "Activities"
+  },
   "footer": {
     "description": "Discover the best places for relaxation and recreation.",
     "company": "Company",

@@ -26,7 +26,7 @@ export function IncludedList({
         <ul className="space-y-1.5">
           {included.map((item, index) => (
             <li key={index} className="flex items-start gap-2 text-sm">
-              <Check className="h-4 w-4 text-green-600 flex-shrink-0 mt-0.5" />
+              <Check className="h-4 w-4 text-green-600 shrink-0 mt-0.5" />
               <span>{item}</span>
             </li>
           ))}
@@ -37,7 +37,7 @@ export function IncludedList({
           <ul className="space-y-1.5 mt-4">
             {notIncluded.map((item, index) => (
               <li key={index} className="flex items-start gap-2 text-sm text-muted-foreground">
-                <X className="h-4 w-4 text-red-500 flex-shrink-0 mt-0.5" />
+                <X className="h-4 w-4 text-red-500 shrink-0 mt-0.5" />
                 <span>{item}</span>
               </li>
             ))}
@@ -59,7 +59,7 @@ export function IncludedList({
         <ul className="space-y-2">
           {included.map((item, index) => (
             <li key={index} className="flex items-start gap-2 text-sm">
-              <Check className="h-4 w-4 text-green-600 flex-shrink-0 mt-0.5" />
+              <Check className="h-4 w-4 text-green-600 shrink-0 mt-0.5" />
               <span>{item}</span>
             </li>
           ))}
@@ -76,7 +76,7 @@ export function IncludedList({
           <ul className="space-y-2">
             {notIncluded.map((item, index) => (
               <li key={index} className="flex items-start gap-2 text-sm text-muted-foreground">
-                <X className="h-4 w-4 text-red-500 flex-shrink-0 mt-0.5" />
+                <X className="h-4 w-4 text-red-500 shrink-0 mt-0.5" />
                 <span>{item}</span>
               </li>
             ))}

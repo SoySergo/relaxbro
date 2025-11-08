@@ -27,7 +27,41 @@
     "family": "Семейный отдых",
     "shopping": "Шопинг",
     "unique-experience": "Уникальный опыт",
-    "spiritual": "Духовные практики"
+    "spiritual": "Духовные практики",
+    "tours-excursions": "Туры и экскурсии",
+    "water-sports": "Водные виды спорта",
+    "workshops": "Мастер-классы",
+    "photoshoots": "Фотосессии",
+    "yacht-fishing": "Яхтинг и рыбалка",
+    "extreme-sports": "Экстремальные виды спорта",
+    "cultural-tours": "Культурные туры",
+    "food-tours": "Гастрономические туры",
+    "team-building": "Тимбилдинг",
+    "private-experiences": "Частные впечатления"
+  },
+  "search": {
+    "placeholder": "Поиск мест, активностей...",
+    "noResults": "Ничего не найдено",
+    "tryAdjustFilters": "Попробуйте изменить фильтры",
+    "searching": "Поиск...",
+    "results": "{count} мест найдено"
+  },
+  "filters": {
+    "all": "Все",
+    "reset": "Сбросить",
+    "more-filters": "Ещё фильтры",
+    "advanced-filters": "Дополнительные фильтры",
+    "categories": "Категории",
+    "select-categories": "Выберите категории",
+    "save-filter": "Сохранить фильтр",
+    "rating": "Рейтинг",
+    "min-rating": "Минимальный рейтинг",
+    "open-now": "Открыто сейчас",
+    "price": "Цена",
+    "price-range": "Ценовой диапазон",
+    "from": "От",
+    "up-to": "До",
+    "quick-select": "Быстрый выбор"
   },
   "map": {
     "showList": "Показать список",
@@ -73,6 +107,7 @@
     },
     "show-more": "Показать ещё",
     "show-less": "Скрыть",
+    "more": "ещё",
     "active-filters": "Активные фильтры",
     "clear-all": "Очистить всё"
   },
@@ -115,6 +150,7 @@
     }
   },
   "header": {
+    "home": "Главная",
     "places": "Места",
     "activities": "Активности"
   },

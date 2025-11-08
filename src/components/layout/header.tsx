@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { useTranslations, useLocale } from 'next-intl';
@@ -37,8 +37,35 @@ export function Header({ variant = 'app', className, isAuthenticated = false, us
     const router = useRouter();
     const pathname = usePathname();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [isScrolled, setIsScrolled] = useState(false);
 
     const isLanding = variant === 'landing';
+
+    // Handle scroll to hide/show mobile header
+    useEffect(() => {
+        let lastScrollY = window.scrollY;
+        let ticking = false;
+
+        const handleScroll = () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    const currentScrollY = window.scrollY;
+                    // Hide header when scrolling down (after 50px), show when scrolling up
+                    if (currentScrollY > 50 && currentScrollY > lastScrollY) {
+                        setIsScrolled(true);
+                    } else {
+                        setIsScrolled(false);
+                    }
+                    lastScrollY = currentScrollY;
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     // Determine active tab based on pathname
     const isActivitiesPage = pathname?.includes('/activities');
@@ -66,11 +93,18 @@ export function Header({ variant = 'app', className, isAuthenticated = false, us
         ];
 
     return (
-        <header className={cn('sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60', className)}>
+        <header
+            className={cn(
+                'sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 transition-transform duration-300',
+                // On mobile: hide when scrolled down
+                isScrolled && '-translate-y-full md:translate-y-0',
+                className
+            )}
+        >
             <Container>
                 <div className="flex h-16 items-center justify-between">
-                    {/* Logo */}
-                    <Link href={`/${locale}`} className="flex items-center space-x-2">
+                    {/* Logo - On mobile: centered and always visible when header is shown */}
+                    <Link href={`/${locale}`} className="flex items-center space-x-2 md:flex-1">
                         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-linear-to-br from-primary-500 to-primary-600 text-white shadow-md">
                             <span className="text-xl font-bold">R</span>
                         </div>
@@ -230,7 +264,8 @@ export function Header({ variant = 'app', className, isAuthenticated = false, us
                             </div>
                         )}
 
-                        {/* Mobile Menu Toggle */}
+                        {/* Mobile Menu Toggle - Hidden, navigation moved to bottom bar */}
+                        {/* We keep the mobile menu for language switching and additional options */}
                         <Button
                             variant="ghost"
                             size="icon"
@@ -249,51 +284,10 @@ export function Header({ variant = 'app', className, isAuthenticated = false, us
                     </div>
                 </div>
 
-                {/* Mobile Menu */}
+                {/* Mobile Menu - Simplified for language and settings only */}
                 {isMobileMenuOpen && (
                     <div className="border-t py-4 md:hidden animate-in slide-in-from-top-2 duration-200">
                         <nav className="flex flex-col space-y-1">
-                            {/* Places / Activities Navigation for App */}
-                            {!isLanding && (
-                                <div className="border-b pb-2 mb-2">
-                                    <Link
-                                        href={`/${locale}/explore`}
-                                        className={cn(
-                                            'rounded-md px-4 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-foreground active:bg-accent/50 block',
-                                            isPlacesPage
-                                                ? 'text-foreground bg-accent'
-                                                : 'text-muted-foreground'
-                                        )}
-                                        onClick={() => setIsMobileMenuOpen(false)}
-                                    >
-                                        {t('header.places')}
-                                    </Link>
-                                    <Link
-                                        href={`/${locale}/activities`}
-                                        className={cn(
-                                            'rounded-md px-4 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-foreground active:bg-accent/50 block',
-                                            isActivitiesPage
-                                                ? 'text-foreground bg-accent'
-                                                : 'text-muted-foreground'
-                                        )}
-                                        onClick={() => setIsMobileMenuOpen(false)}
-                                    >
-                                        {t('header.activities')}
-                                    </Link>
-                                </div>
-                            )}
-
-                            {/* Navigation Links */}
-                            {navigation.map((item) => (
-                                <Link
-                                    key={item.name}
-                                    href={item.href}
-                                    className="rounded-md px-4 py-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground active:bg-accent/50"
-                                    onClick={() => setIsMobileMenuOpen(false)}
-                                >
-                                    {item.name}
-                                </Link>
-                            ))}
 
                             {/* Auth Buttons */}
                             {isLanding ? (

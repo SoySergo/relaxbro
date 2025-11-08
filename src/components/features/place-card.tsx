@@ -116,6 +116,8 @@ export function PlaceCard({
     const [localFavorite, setLocalFavorite] = React.useState(isFavorite);
     const [currentImageIndex, setCurrentImageIndex] = React.useState(0);
     const [imageLoaded, setImageLoaded] = React.useState(false);
+    const [touchStart, setTouchStart] = React.useState(0);
+    const [touchEnd, setTouchEnd] = React.useState(0);
 
     React.useEffect(() => {
         setLocalFavorite(isFavorite);
@@ -140,6 +142,36 @@ export function PlaceCard({
     const handleNextImage = (e: React.MouseEvent) => {
         e.stopPropagation();
         setCurrentImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+    };
+
+    // Touch handlers for swipe
+    const handleTouchStart = (e: React.TouchEvent) => {
+        setTouchStart(e.targetTouches[0].clientX);
+    };
+
+    const handleTouchMove = (e: React.TouchEvent) => {
+        setTouchEnd(e.targetTouches[0].clientX);
+    };
+
+    const handleTouchEnd = (e: React.TouchEvent) => {
+        if (!touchStart || !touchEnd) return;
+
+        const distance = touchStart - touchEnd;
+        const isLeftSwipe = distance > 50;
+        const isRightSwipe = distance < -50;
+
+        if (isLeftSwipe) {
+            e.stopPropagation();
+            setCurrentImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+        }
+        if (isRightSwipe) {
+            e.stopPropagation();
+            setCurrentImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+        }
+
+        // Reset values
+        setTouchStart(0);
+        setTouchEnd(0);
     };
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -168,7 +200,12 @@ export function PlaceCard({
             aria-pressed={isSelected}
         >
             {/* Image */}
-            <div className="relative aspect-video w-full overflow-hidden bg-muted group/image">
+            <div
+                className="relative aspect-video w-full overflow-hidden bg-muted group/image"
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
+            >
                 {!imageError ? (
                     <Image
                         src={images[currentImageIndex] || '/placeholder.jpg'}
@@ -309,9 +346,9 @@ export function PlaceCard({
                 </div>
             </div>
 
-            <CardContent className="p-3 sm:p-4 space-y-2">
+            <CardContent className="p-3 sm:p-4 space-y-2.5">
                 {/* Name */}
-                <h3 className="font-semibold text-sm sm:text-base line-clamp-2 leading-tight">
+                <h3 className="font-semibold text-lg line-clamp-2 leading-snug min-h-14 flex items-start">
                     {name}
                 </h3>
 
@@ -327,17 +364,17 @@ export function PlaceCard({
                 )}
 
                 {/* Rating and Reviews */}
-                <div className="flex items-center gap-1.5 sm:gap-2">
+                <div className="flex items-center gap-2">
                     <Rating value={rating} readonly size="sm" />
-                    <span className="text-xs sm:text-sm text-muted-foreground whitespace-nowrap">
+                    <span className="text-sm text-muted-foreground whitespace-nowrap">
                         ({reviewsCount})
                     </span>
                 </div>
 
                 {/* Location */}
                 {location && (
-                    <div className="flex items-center gap-1 text-xs sm:text-sm text-muted-foreground">
-                        <MapPin className="h-3 w-3 sm:h-3.5 sm:w-3.5 shrink-0" />
+                    <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                        <MapPin className="h-3.5 w-3.5 shrink-0" />
                         <span className="line-clamp-1">{location}</span>
                     </div>
                 )}

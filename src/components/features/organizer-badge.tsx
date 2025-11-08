@@ -41,7 +41,7 @@ export function OrganizerBadge({
   return (
     <div
       className={cn(
-        'inline-flex items-center gap-2 rounded-full bg-muted/50 px-2 py-1',
+        'inline-flex items-center gap-2 rounded-full bg-muted/50  py-1',
         onClick && 'cursor-pointer hover:bg-muted transition-colors',
         className,
       )}
