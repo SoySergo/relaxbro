@@ -34,6 +34,8 @@ import type { FilterBarState, AdvancedFiltersState } from '@/components/features
 import { Header, Footer, Container, MobileBottomNav } from '@/components/layout';
 import { Waves, Sparkles, UtensilsCrossed, Trees, Palette, Music, Compass } from 'lucide-react';
 import type { ActivityCategory } from '@/lib/types';
+import { ActivityComponentsSection } from './_sections/ActivityComponentsSection';
+import { FilterComponentsSection } from './_sections/FilterComponentsSection';
 
 export default function DemoPage() {
     const [ratingValue, setRatingValue] = useState(3.5);
@@ -1224,6 +1226,12 @@ export default function DemoPage() {
                     </div>
                 </CardContent>
             </Card>
+
+            {/* New Activity Components Section */}
+            <ActivityComponentsSection />
+
+            {/* New Filter Components Section */}
+            <FilterComponentsSection />
 
             {/* Layout Components Demo */}
             <Card>

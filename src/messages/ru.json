@@ -15,7 +15,9 @@
     "next": "Далее",
     "loading": "Загрузка...",
     "error": "Ошибка",
-    "language": "Язык"
+    "language": "Язык",
+    "select-date": "Выберите дату",
+    "select-date-range": "Выберите период"
   },
   "categories": {
     "active-recreation": "Активный отдых",
@@ -124,6 +126,27 @@
       "team-building": "Тимбилдинг",
       "private-experiences": "Частные впечатления"
     },
+    "filters": {
+      "popular": "Популярные",
+      "price-asc": "Цена: по возрастанию",
+      "price-desc": "Цена: по убыванию",
+      "rating": "По рейтингу",
+      "new": "Новинки",
+      "duration": "Длительность",
+      "short": "До 3 часов",
+      "half-day": "Полдня (3-6 часов)",
+      "full-day": "Полный день (6-10 часов)",
+      "multi-day": "Многодневный",
+      "date": "Дата",
+      "sort": "Сортировка",
+      "clear-all": "Очистить всё",
+      "duration-descriptions": {
+        "short": "До 3 часов",
+        "half-day": "3-6 часов",
+        "full-day": "6-10 часов",
+        "multi-day": "Более 1 дня"
+      }
+    },
     "common": {
       "from-prefix": "от",
       "per-person": "на человека",
@@ -146,7 +169,11 @@
       "meeting-point": "Точка встречи",
       "meeting-point-flexible": "Выбор локации",
       "included": "Включено",
-      "not-included": "Не включено"
+      "not-included": "Не включено",
+      "slots-left": "{count} мест",
+      "availability-available": "Доступно",
+      "availability-low": "Мало мест",
+      "availability-unavailable": "Недоступно"
     }
   },
   "header": {

@@ -68,6 +68,15 @@ export type { SearchInputProps } from './search-input';
 export { SearchWithResults } from './search-with-results';
 export type { SearchWithResultsProps, SearchResult } from './search-with-results';
 export { IconWrapper } from './icon-wrapper';
+export { Calendar } from './calendar';
+export { DatePicker, DateRangePicker } from './date-picker';
+export { PriceDisplay, PriceRangeDisplay } from './price-display';
+export { DurationBadge } from './duration-badge';
+export { GroupSizeBadge } from './group-size-badge';
+export { MeetingPointBadge } from './meeting-point-badge';
+export { TagList } from './tag-list';
+export { FilterChips } from './filter-chips';
+export type { FilterChipItem } from './filter-chips';
 export {
     Command,
     CommandDialog,
